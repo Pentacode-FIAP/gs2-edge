@@ -1,0 +1,444 @@
+{
+  "version": 1,
+  "author": "PentaCode - 1ESPH",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "potTensao",
+      "top": 272.5,
+      "left": -930,
+      "rotate": 180,
+      "attrs": {
+        "value": "866"
+      }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "potLatencia",
+      "top": 272.5,
+      "left": -780,
+      "rotate": 180,
+      "attrs": {
+        "value": "50"
+      }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz",
+      "top": 280,
+      "left": -630,
+      "rotate": 180,
+      "attrs": {
+        "volume": "0.2"
+      }
+    },
+    {
+      "type": "wokwi-rgb-led",
+      "id": "rgb",
+      "top": 351,
+      "left": -470,
+      "rotate": 180,
+      "attrs": {
+        "common": "cathode"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rR",
+      "top": 325.2,
+      "left": -455.35,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rG",
+      "top": 325.2,
+      "left": -491.35,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rB",
+      "top": 325.2,
+      "left": -511.35,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-slide-switch",
+      "id": "swQueda",
+      "top": 279,
+      "left": -330,
+      "rotate": 180,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "sonar",
+      "top": 280.5,
+      "left": -240,
+      "rotate": 180,
+      "attrs": {
+        "distance": "200"
+      }
+    },
+    {
+      "type": "board-ssd1306",
+      "id": "oled",
+      "top": 200,
+      "left": 150,
+      "attrs": {
+        "i2cAddress": "0x3c"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "lblTensao",
+      "top": 356,
+      "left": -950,
+      "attrs": {
+        "text": "Tens\u00e3o do poste\n(0 a 150 V)"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "lblLatencia",
+      "top": 356,
+      "left": -805,
+      "attrs": {
+        "text": "Lat\u00eancia da rede\n(0 a 2000 ms)"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "lblBuzzer",
+      "top": 372,
+      "left": -645,
+      "attrs": {
+        "text": "Bipe ao entrar\nem falha"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "lblLed",
+      "top": 432,
+      "left": -515,
+      "attrs": {
+        "text": "LED de status"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "lblQueda",
+      "top": 322,
+      "left": -365,
+      "attrs": {
+        "text": "Simular queda\nde rede"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "lblSonar",
+      "top": 382,
+      "left": -225,
+      "attrs": {
+        "text": "N\u00edvel da \u00e1gua na rua\n(sensor a 2 m do ch\u00e3o)"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "lblOled",
+      "top": 292,
+      "left": 140,
+      "attrs": {
+        "text": "Tela de manuten\u00e7\u00e3o"
+      }
+    }
+  ],
+  "connections": [
+    [
+      "esp:TX0",
+      "$serialMonitor:RX",
+      "",
+      []
+    ],
+    [
+      "esp:RX0",
+      "$serialMonitor:TX",
+      "",
+      []
+    ],
+    [
+      "potTensao:SIG",
+      "esp:D34",
+      "orange",
+      [
+        "v-226.9",
+        "h898"
+      ]
+    ],
+    [
+      "potLatencia:SIG",
+      "esp:D35",
+      "violet",
+      [
+        "v-217.1",
+        "h748"
+      ]
+    ],
+    [
+      "bz:2",
+      "esp:D32",
+      "gold",
+      [
+        "v-207.8",
+        "h597"
+      ]
+    ],
+    [
+      "rB:1",
+      "esp:D33",
+      "blue",
+      [
+        "v-219.5",
+        "h487"
+      ]
+    ],
+    [
+      "rG:1",
+      "esp:D25",
+      "green",
+      [
+        "v-209.9",
+        "h467"
+      ]
+    ],
+    [
+      "rR:1",
+      "esp:D26",
+      "red",
+      [
+        "v-200.2",
+        "h431"
+      ]
+    ],
+    [
+      "swQueda:2",
+      "esp:D27",
+      "purple",
+      [
+        "v-169.2",
+        "h319"
+      ]
+    ],
+    [
+      "sonar:ECHO",
+      "esp:D14",
+      "green",
+      [
+        "v-160",
+        "h166.3"
+      ]
+    ],
+    [
+      "sonar:TRIG",
+      "esp:D13",
+      "orange",
+      [
+        "v-140.5",
+        "h156.3"
+      ]
+    ],
+    [
+      "sonar:VCC",
+      "esp:VIN",
+      "red",
+      [
+        "v-121.5",
+        "h146.3"
+      ]
+    ],
+    [
+      "rgb:R",
+      "rR:2",
+      "red",
+      [
+        "v-6",
+        "h10.5",
+        "v-14"
+      ]
+    ],
+    [
+      "rgb:G",
+      "rG:2",
+      "green",
+      [
+        "v-6",
+        "h-7.6",
+        "v-14"
+      ]
+    ],
+    [
+      "rgb:B",
+      "rB:2",
+      "blue",
+      [
+        "v-6",
+        "h-18.3",
+        "v-14"
+      ]
+    ],
+    [
+      "potTensao:GND",
+      "esp:GND.2",
+      "black",
+      [
+        "v-28",
+        "h853",
+        "v-103",
+        "h35"
+      ]
+    ],
+    [
+      "potLatencia:GND",
+      "esp:GND.2",
+      "black",
+      [
+        "v-28",
+        "h703",
+        "v-103",
+        "h35"
+      ]
+    ],
+    [
+      "bz:1",
+      "esp:GND.2",
+      "black",
+      [
+        "v-28",
+        "h552",
+        "v-103",
+        "h35"
+      ]
+    ],
+    [
+      "rgb:COM",
+      "esp:GND.2",
+      "black",
+      [
+        "v-118",
+        "h416",
+        "v-103",
+        "h35"
+      ]
+    ],
+    [
+      "swQueda:1",
+      "esp:GND.2",
+      "black",
+      [
+        "v-28",
+        "h274.5",
+        "v-103",
+        "h35"
+      ]
+    ],
+    [
+      "sonar:GND",
+      "esp:GND.2",
+      "black",
+      [
+        "v-28",
+        "h141.3",
+        "v-103",
+        "h35"
+      ]
+    ],
+    [
+      "potTensao:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "v-18",
+        "h1019",
+        "v-103.5",
+        "h-14.7"
+      ]
+    ],
+    [
+      "potLatencia:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "v-18",
+        "h869",
+        "v-103.5",
+        "h-14.7"
+      ]
+    ],
+    [
+      "swQueda:3",
+      "esp:3V3",
+      "red",
+      [
+        "v-18",
+        "h439.5",
+        "v-103.5",
+        "h-14.7"
+      ]
+    ],
+    [
+      "oled:SDA",
+      "esp:D22",
+      "blue",
+      [
+        "v-172.46",
+        "h-115.6"
+      ]
+    ],
+    [
+      "oled:SCL",
+      "esp:D21",
+      "yellow",
+      [
+        "v-143.56",
+        "h-105.77"
+      ]
+    ],
+    [
+      "oled:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "v-47.96",
+        "h-96.32"
+      ]
+    ],
+    [
+      "oled:GND",
+      "esp:GND.1",
+      "black",
+      [
+        "v-57.46",
+        "h-86.87"
+      ]
+    ]
+  ],
+  "dependencies": {}
+}

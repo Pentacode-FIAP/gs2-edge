@@ -1,0 +1,173 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/public-sans';
+@import 'leaflet/dist/leaflet.css';
+
+/* Paleta do protótipo de média fidelidade (vizi_prototipo.html) */
+:root {
+  --bg: #f5f4f0;
+  --ink: #1a1d1c;
+  --mut: #5c6360;
+  --card: #ffffff;
+  --line: #e2e0d9;
+  --pri: #0e7c86;
+  --pri-d: #0b636b;
+  --pri-l: #e2f2f3;
+  --marca-1: #0f2a3d;
+  --marca-2: #0e7c86;
+  --marca-3: #f5a524;
+  --on-pri: #ffffff;
+  --energia: #d97706;
+  --sinal: #4f46e5;
+  --agua: #0891b2;
+  --alag: #1d4ed8;
+  --trans: #dc2626;
+  --sensor: #64748b;
+  --ok: #15803d;
+  --okbg: #dcfce7;
+  --warn: #b45309;
+  --warnbg: #fef3c7;
+  --bad: #b91c1c;
+  --badbg: #fee2e2;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #121514;
+    --ink: #ecefed;
+    --mut: #a3aba8;
+    --card: #1b1f1e;
+    --line: #2d3230;
+    --pri: #3cc4cf;
+    --pri-d: #6fd6de;
+    --pri-l: #12303a;
+    --marca-1: #f4f7f6;
+    --marca-2: #3cc4cf;
+    --marca-3: #f5a524;
+    --on-pri: #06201d;
+    --energia: #fbbf24;
+    --sinal: #a5b4fc;
+    --agua: #22d3ee;
+    --alag: #93c5fd;
+    --trans: #f87171;
+    --sensor: #94a3b8;
+    --ok: #86efac;
+    --okbg: #14321f;
+    --warn: #fcd34d;
+    --warnbg: #3a2c0b;
+    --bad: #fca5a5;
+    --badbg: #3b1414;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #121514;
+  --ink: #ecefed;
+  --mut: #a3aba8;
+  --card: #1b1f1e;
+  --line: #2d3230;
+  --pri: #3cc4cf;
+  --pri-d: #6fd6de;
+  --pri-l: #12303a;
+  --marca-1: #f4f7f6;
+  --marca-2: #3cc4cf;
+  --marca-3: #f5a524;
+  --on-pri: #06201d;
+  --energia: #fbbf24;
+  --sinal: #a5b4fc;
+  --agua: #22d3ee;
+  --alag: #93c5fd;
+  --trans: #f87171;
+  --sensor: #94a3b8;
+  --ok: #86efac;
+  --okbg: #14321f;
+  --warn: #fcd34d;
+  --warnbg: #3a2c0b;
+  --bad: #fca5a5;
+  --badbg: #3b1414;
+  color-scheme: dark;
+}
+
+/* Expõe os tokens como utilitários do Tailwind: bg-card, text-mut, border-line... */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-ink: var(--ink);
+  --color-mut: var(--mut);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-pri: var(--pri);
+  --color-pri-d: var(--pri-d);
+  --color-pri-l: var(--pri-l);
+  --color-on-pri: var(--on-pri);
+  --color-energia: var(--energia);
+  --color-sinal: var(--sinal);
+  --color-agua: var(--agua);
+  --color-alag: var(--alag);
+  --color-trans: var(--trans);
+  --color-sensor: var(--sensor);
+  --color-ok: var(--ok);
+  --color-okbg: var(--okbg);
+  --color-warn: var(--warn);
+  --color-warnbg: var(--warnbg);
+  --color-bad: var(--bad);
+  --color-badbg: var(--badbg);
+  --font-sans: 'Public Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  button,
+  a,
+  [role='button'] {
+    touch-action: manipulation;
+  }
+
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--pri);
+    outline-offset: 2px;
+  }
+}
+
+/* Ajustes do Leaflet para o tema */
+.leaflet-container {
+  font-family: inherit;
+  background: var(--line);
+}
+
+:root[data-theme='dark'] .leaflet-tile-pane {
+  filter: brightness(0.75) invert(1) contrast(0.9) hue-rotate(180deg) saturate(0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .leaflet-tile-pane {
+    filter: brightness(0.75) invert(1) contrast(0.9) hue-rotate(180deg) saturate(0.6);
+  }
+}
+
+.vizi-pin {
+  background: none;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

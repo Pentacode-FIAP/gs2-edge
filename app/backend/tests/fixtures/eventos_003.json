@@ -1,0 +1,50 @@
+{
+  "contextResponses": [
+    {
+      "contextElement": {
+        "attributes": [
+          {
+            "name": "evento",
+            "values": [
+              {
+                "_id": "x",
+                "recvTime": "2026-11-12T20:50:01.000Z",
+                "attrName": "evento",
+                "attrType": "Text",
+                "attrValue": "agua,atencao,9.1,0"
+              },
+              {
+                "_id": "x",
+                "recvTime": "2026-11-12T20:52:34.904Z",
+                "attrName": "evento",
+                "attrType": "Text",
+                "attrValue": "agua,alagamento,24.8,0"
+              },
+              {
+                "_id": "x",
+                "recvTime": "2026-11-12T20:51:00.000Z",
+                "attrName": "evento",
+                "attrType": "Text",
+                "attrValue": "energia,sem_energia,3.2,12"
+              },
+              {
+                "_id": "x",
+                "recvTime": "2026-11-12T20:51:30.000Z",
+                "attrName": "evento",
+                "attrType": "Text",
+                "attrValue": "lixo"
+              }
+            ]
+          }
+        ],
+        "id": "urn:ngsi-ld:SensorVizi:003",
+        "isPattern": false,
+        "type": "SensorVizi"
+      },
+      "statusCode": {
+        "code": "200",
+        "reasonPhrase": "OK"
+      }
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+# FIWARE local do Vizi (baseado no "FIWARE Descomplicado" usado no CP5)
+# Sobe: Mosquitto (com ponte para o broker publico), IoT Agent UltraLight,
+# Orion Context Broker, STH-Comet e os dois MongoDB.
+#
+#   docker compose up -d
+#   python provision.py
+#
+# Portas: 1883 (MQTT), 4041 (IoT Agent), 1026 (Orion), 8666 (STH-Comet)
+name: vizi-fiware
+
+services:
+  # MongoDB historico (com autenticacao) - usado pelo Orion e pelo STH-Comet
+  mongo-db-historical:
+    image: mongo:4.4
+    restart: unless-stopped
+    hostname: mongo-db-historical
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin123
+    command: ["mongod", "--nojournal", "--auth"]
+    volumes:
+      - mongo-historical-data:/data/db
+
+  # MongoDB interno (sem autenticacao) - registro de devices do IoT Agent
+  mongo-db-internal:
+    image: mongo:4.4
+    restart: unless-stopped
+    hostname: mongo-db-internal
+    command: ["mongod", "--nojournal"]
+    volumes:
+      - mongo-internal-data:/data/db
+
+  # Orion - Context Broker (estado atual de cada sensor)
+  orion:
+    image: fiware/orion:3.11.0
+    restart: unless-stopped
+    hostname: orion
+    depends_on:
+      - mongo-db-historical
+    ports:
+      - "1026:1026"
+    command: >
+      -dbhost mongo-db-historical
+      -dbuser admin
+      -dbpwd admin123
+      -dbAuthDb admin
+      -corsOrigin __ALL
+      -corsMaxAge 600
+
+  # STH-Comet - historico das leituras (graficos e horas sem servico)
+  sth-comet:
+    image: telefonicaiot/fiware-sth-comet
+    restart: unless-stopped
+    hostname: sth-comet
+    depends_on:
+      - mongo-db-historical
+    ports:
+      - "8666:8666"
+    environment:
+      - STH_HOST=0.0.0.0
+      - STH_PORT=8666
+      - DB_PREFIX=sth_
+      - DB_URI=mongo-db-historical:27017
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin123
+      - DB_AUTH_SOURCE=admin
+      - LOGOPS_LEVEL=INFO
+
+  # Mosquitto - broker MQTT local, com ponte para o broker publico
+  # (o Wokwi do navegador nao alcanca a maquina local; ele publica no
+  # broker publico e a ponte traz as mensagens para ca)
+  mosquitto:
+    image: eclipse-mosquitto:2.0.18
+    restart: unless-stopped
+    hostname: mosquitto
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+
+  # IoT Agent UltraLight - traduz o MQTT do ESP32 para entidades no Orion
+  iot-agent:
+    image: fiware/iotagent-ul:latest
+    restart: unless-stopped
+    hostname: iot-agent
+    depends_on:
+      - mongo-db-internal
+      - mosquitto
+      - orion
+    ports:
+      - "4041:4041"
+    environment:
+      - IOTA_CB_HOST=orion
+      - IOTA_CB_PORT=1026
+      - IOTA_CB_NGSI_VERSION=v2
+      - IOTA_NORTH_PORT=4041
+      - IOTA_REGISTRY_TYPE=mongodb
+      - IOTA_MONGO_HOST=mongo-db-internal
+      - IOTA_MONGO_PORT=27017
+      - IOTA_MQTT_HOST=mosquitto
+      - IOTA_MQTT_PORT=1883
+      - IOTA_LOG_LEVEL=INFO
+      - IOTA_TIMESTAMP=true
+      - IOTA_AUTOCAST=true
+      - IOTA_PROVIDER_URL=http://iot-agent:4041
+      - IOTA_AMQP_DISABLED=true
+
+volumes:
+  mongo-historical-data:
+  mongo-internal-data:

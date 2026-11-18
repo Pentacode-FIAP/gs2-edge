@@ -1,0 +1,165 @@
+{
+    "id": "urn:ngsi-ld:SensorVizi:003",
+    "type": "SensorVizi",
+    "TimeInstant": {
+        "type": "DateTime",
+        "value": "2026-11-12T20:53:04.912Z",
+        "metadata": {}
+    },
+    "dadosSimulados": {
+        "type": "Boolean",
+        "value": true,
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:53:04.912Z"
+            }
+        }
+    },
+    "estadoAgua": {
+        "type": "Text",
+        "value": "alagamento",
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:53:04.912Z"
+            }
+        }
+    },
+    "estadoEnergia": {
+        "type": "Text",
+        "value": "normal",
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:53:04.912Z"
+            }
+        }
+    },
+    "estadoGeral": {
+        "type": "Text",
+        "value": "critico",
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:53:04.912Z"
+            }
+        }
+    },
+    "estadoSinal": {
+        "type": "Text",
+        "value": "ok",
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:53:04.912Z"
+            }
+        }
+    },
+    "evento": {
+        "type": "Text",
+        "value": "agua,alagamento,24.8,0",
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:52:34.904Z"
+            }
+        }
+    },
+    "filaOffline": {
+        "type": "Number",
+        "value": 0,
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:53:04.912Z"
+            }
+        }
+    },
+    "latencia": {
+        "type": "Number",
+        "value": 91,
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:53:04.912Z"
+            }
+        }
+    },
+    "location": {
+        "type": "geo:json",
+        "value": {
+            "type": "Point",
+            "coordinates": [
+                -46.653,
+                -23.56
+            ]
+        },
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:53:04.912Z"
+            }
+        }
+    },
+    "minutosSemEnergia": {
+        "type": "Number",
+        "value": 0,
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:53:04.912Z"
+            }
+        }
+    },
+    "minutosSemSinal": {
+        "type": "Number",
+        "value": 0,
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:53:04.912Z"
+            }
+        }
+    },
+    "nivelAgua": {
+        "type": "Number",
+        "value": 25.3,
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:53:04.912Z"
+            }
+        }
+    },
+    "nome": {
+        "type": "Text",
+        "value": "Corrego da Av. Brasil",
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:53:04.912Z"
+            }
+        }
+    },
+    "origem": {
+        "type": "Text",
+        "value": "simulador",
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:53:04.912Z"
+            }
+        }
+    },
+    "tensao": {
+        "type": "Number",
+        "value": 126.4,
+        "metadata": {
+            "TimeInstant": {
+                "type": "DateTime",
+                "value": "2026-11-12T20:53:04.912Z"
+            }
+        }
+    }
+}

@@ -1,0 +1,30 @@
+{
+  "id": "urn:ngsi-ld:SensorVizi:002",
+  "type": "SensorVizi",
+  "nome": {
+    "type": "Text",
+    "value": "Corrego da Av. Brasil",
+    "metadata": {}
+  },
+  "location": {
+    "type": "geo:json",
+    "value": {
+      "type": "Point",
+      "coordinates": [
+        -46.653,
+        -23.56
+      ]
+    },
+    "metadata": {}
+  },
+  "origem": {
+    "type": "Text",
+    "value": "simulador",
+    "metadata": {}
+  },
+  "dadosSimulados": {
+    "type": "Boolean",
+    "value": true,
+    "metadata": {}
+  }
+}

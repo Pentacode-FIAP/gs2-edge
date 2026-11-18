@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vizi · teste ponta a ponta</title>
+<!-- Dashboard PROVISORIO: so prova o fluxo Wokwi -> FIWARE -> API -> tela.
+     Sera trocado pelo app da entrega de Front, que usa este mesmo contrato. -->
+<style>
+  :root { --pri:#0f766e; --mut:#5b6b69; --line:#dbe3e1; --bg:#eef2f1; --card:#fff; --ink:#14201f;
+          --alta:#dc2626; --media:#b45309; --ok:#15803d; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--ink); padding:16px; }
+  header { display:flex; flex-wrap:wrap; gap:8px; align-items:baseline; margin-bottom:12px; }
+  h1 { margin:0; font-size:22px; } h1 span { color:var(--pri); }
+  h2 { font-size:15px; margin:18px 0 8px; }
+  .selo { font-size:12px; font-weight:700; padding:3px 10px; border-radius:99px; background:#fef3c7; color:#b45309; }
+  .mut { color:var(--mut); font-size:12px; }
+  .erro { display:none; background:#fee2e2; color:#991b1b; padding:8px 12px; border-radius:10px; margin-bottom:10px; }
+  .grade { display:grid; gap:10px; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; }
+  .linha { display:flex; justify-content:space-between; font-size:13px; padding:3px 0; }
+  .alerta { cursor:pointer; display:flex; justify-content:space-between; gap:8px; align-items:center; }
+  .alerta:hover { border-color:var(--pri); }
+  .pill { font-size:11px; font-weight:700; padding:2px 8px; border-radius:99px; color:#fff; white-space:nowrap; }
+  .alta { background:var(--alta); } .media { background:var(--media); } .ok { background:var(--ok); }
+  .off { background:#6b7280; }
+  ul { margin:6px 0 0; padding-left:18px; font-size:13px; }
+  pre { font-size:12px; white-space:pre-wrap; margin:6px 0 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1><span>Vizi</span> · teste ponta a ponta</h1>
+  <span class="selo">Dados simulados</span>
+  <span class="mut" id="atualizado"></span>
+</header>
+<div class="erro" id="erro">Sem conexão com a API ou com o FIWARE. Tentando de novo…</div>
+
+<h2>Alertas ativos</h2>
+<div class="grade" id="alertas"></div>
+<div class="card" id="detalhe" style="display:none;margin-top:10px"></div>
+
+<h2>Sensores</h2>
+<div class="grade" id="sensores"></div>
+
+<h2>Bairro</h2>
+<div class="card" id="bairro"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const hora = (iso) => iso ? new Date(iso).toLocaleTimeString("pt-BR") : "—";
+const num = (v, u) => v == null ? "—" : `${String(v).replace(".", ",")} ${u}`;
+let aberto = null;
+
+async function pegar(caminho) {
+  const r = await fetch(caminho);
+  if (!r.ok) throw Object.assign(new Error(r.status), { status: r.status });
+  return r.json();
+}
+
+function cartaoSensor(s) {
+  const status = s.aguardando ? '<span class="pill off">aguardando 1ª leitura</span>'
+    : s.online ? '<span class="pill ok">online</span>' : '<span class="pill off">sem comunicação</span>';
+  return `<div class="card">
+    <div class="linha"><b>${s.nome}</b>${status}</div>
+    <div class="mut">${s.id} · ${s.origem} · última leitura ${hora(s.ultimaLeitura)}</div>
+    <div class="linha"><span>⚡ Energia</span><span>${s.energia.estado ?? "—"} · ${num(s.energia.tensao, "V")}</span></div>
+    <div class="linha"><span>📶 Sinal</span><span>${s.sinal.estado ?? "—"} · ${num(s.sinal.latencia, "ms")}</span></div>
+    <div class="linha"><span>🌊 Alagamento</span><span>${s.alagamento.estado ?? "—"} · ${num(s.alagamento.nivel, "cm")}</span></div>
+    <div class="linha"><span>Estado geral</span><b>${s.estadoGeral ?? "—"}</b></div>
+  </div>`;
+}
+
+function cartaoAlerta(a) {
+  return `<div class="card alerta" data-id="${a.id}">
+    <div><b>${a.titulo}</b><div class="mut">${a.local} · desde ${hora(a.desde)}</div></div>
+    <span class="pill ${a.gravidade}">${a.gravidade === "alta" ? "Gravidade alta" : "Gravidade média"}</span>
+  </div>`;
+}
+
+async function mostrarDetalhe() {
+  const box = $("detalhe");
+  if (!aberto) { box.style.display = "none"; return; }
+  box.style.display = "block";
+  try {
+    const d = await pegar(`/api/alertas/${aberto}`);
+    const pontos = d.serie ? d.serie.pontos.slice(-8).map(p => num(p.v, d.serie.unidade)).join(" · ") : "";
+    box.innerHTML = `<b>${d.titulo}</b> · ${d.local}
+      <div class="mut">Tempo sem serviço até agora: ${d.minutosSemServico ?? "—"} min</div>
+      ${d.serie ? `<div class="mut">Últimas leituras (${d.serie.medida}): ${pontos || "—"}</div>` : ""}
+      <ul>${d.linhaDoTempo.map(i => `<li>${hora(i.t)} · ${i.texto}</li>`).join("") || "<li>sem eventos ainda</li>"}</ul>`;
+  } catch (e) {
+    if (e.status === 404) { box.innerHTML = `<b>Serviço normalizado às ${hora(new Date())}</b>`; aberto = null; }
+  }
+}
+
+async function atualizar() {
+  try {
+    const [sensores, alertas, bairro] = await Promise.all(
+      [pegar("/api/sensores"), pegar("/api/alertas"), pegar("/api/bairro")]);
+    $("erro").style.display = "none";
+    $("sensores").innerHTML = sensores.map(cartaoSensor).join("");
+    $("alertas").innerHTML = alertas.map(cartaoAlerta).join("") || '<div class="mut">Tudo normal no bairro.</div>';
+    $("bairro").innerHTML = `<b>${bairro.nome}</b> · ${String(bairro.horasSemServico).replace(".", ",")} h sem serviço
+      · ${bairro.alertasAtivos} alertas · ${bairro.sensoresOnline}/${bairro.sensores} sensores online
+      <div class="mut">${bairro.porTipo.map(t => `${t.tipo}: ${t.minutos} min`).join(" · ")}</div>`;
+    $("atualizado").textContent = `ao vivo · atualizado ${hora(new Date())}`;
+    await mostrarDetalhe();
+  } catch (e) {
+    $("erro").style.display = "block";
+  }
+}
+
+$("alertas").addEventListener("click", (ev) => {
+  const card = ev.target.closest("[data-id]");
+  if (card) { aberto = card.dataset.id; mostrarDetalhe(); }
+});
+atualizar();
+setInterval(atualizar, 5000);
+</script>
+</body>
+</html>
