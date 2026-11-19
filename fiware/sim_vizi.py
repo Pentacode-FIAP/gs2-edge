@@ -4,8 +4,8 @@ Imita o firmware do ESP32 (mesmos limites, mesma suavizacao, mesmo payload
 UltraLight) para que o dashboard tenha varios sensores no mapa sem depender
 do Wokwi. Cada sensor tem um "roteiro" de incidentes:
 
-  vizi002 (Praca Central)          -> quedas de energia e de sinal
-  vizi003 (Corrego da Av. Brasil)  -> agua subindo ate alagar e baixando
+  vizi002 (Praca do Campo Limpo)   -> quedas de energia e de sinal
+  vizi003 (Corrego Pirajucara)     -> agua subindo ate alagar e baixando
   vizi001 (Poste 01)               -> so com --com-wokwi (quando o Wokwi
                                       estiver fora); senao quem publica e o
                                       ESP32 simulado no Wokwi
@@ -14,6 +14,7 @@ Uso:
   python sim_vizi.py                 # vizi002 e vizi003
   python sim_vizi.py --com-wokwi     # inclui vizi001
   python sim_vizi.py --rapido        # incidentes mais frequentes (demo)
+  python sim_vizi.py --calmo         # sem incidentes: so leituras normais (gravar o Wokwi)
 """
 
 import argparse
@@ -102,13 +103,13 @@ class Servico:
 class Sensor:
     """Um sensor simulado com um roteiro de incidentes."""
 
-    def __init__(self, device_id, perfil, rapido):
+    def __init__(self, device_id, perfil, rapido, calmo=False):
         self.id = device_id
         self.perfil = perfil
         self.topico = f"/TEF/{device_id}/attrs"
         self.energia, self.sinal, self.agua = Servico("energia"), Servico("sinal"), Servico("agua")
         self.falhas_rede = 0
-        self.fator = 4 if rapido else 1
+        self.fator = 0 if calmo else (4 if rapido else 1)   # 0 = nunca sorteia incidente
         self.incidente = None        # (tipo, segundos restantes)
         self.t_ultima_pub = 0.0
         self.publicar_agora = False
@@ -191,12 +192,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--com-wokwi", action="store_true", help="simula tambem o vizi001")
     ap.add_argument("--rapido", action="store_true", help="incidentes mais frequentes")
+    ap.add_argument("--calmo", action="store_true", help="sem incidentes, so leituras normais")
     ap.add_argument("--broker", default=BROKER)
     args = ap.parse_args()
 
-    sensores = [Sensor("vizi002", "energia", args.rapido), Sensor("vizi003", "agua", args.rapido)]
+    sensores = [Sensor("vizi002", "energia", args.rapido, args.calmo),
+                Sensor("vizi003", "agua", args.rapido, args.calmo)]
     if args.com_wokwi:
-        sensores.insert(0, Sensor("vizi001", "misto", args.rapido))
+        sensores.insert(0, Sensor("vizi001", "misto", args.rapido, args.calmo))
 
     cliente = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id=f"vizi-sim-{random.randint(0, 9999)}")
     cliente.connect(args.broker, 1883)

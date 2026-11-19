@@ -26,5 +26,9 @@ export const API_VIZI_URL = import.meta.env?.VITE_API_VIZI_URL ?? 'http://localh
 // VITE_SENSORES_MOCK=true usa os sensores simulados no navegador (sem FIWARE rodando).
 export const SENSORES_MOCK = import.meta.env?.VITE_SENSORES_MOCK === 'true'
 
+// VITE_SO_SENSORES=true esconde os avisos de morador (MockAPI): mapa, Bairro e Relatório
+// mostram só o que veio dos sensores. Útil para demonstrar o Edge sem ruído.
+export const SO_SENSORES = import.meta.env?.VITE_SO_SENSORES === 'true'
+
 // De quanto em quanto tempo as telas de sensor buscam leitura nova (o ESP32 publica a cada poucos segundos).
 export const ATUALIZAR_SENSORES_MS = 5000

@@ -23,8 +23,8 @@ Com o Wokwi fora do ar, `--com-wokwi` simula também o `vizi001`.
 | device_id | Entidade no Orion | Local (fictício) | Quem publica |
 |---|---|---|---|
 | vizi001 | `urn:ngsi-ld:SensorVizi:001` | Poste 01 - Rua das Flores | ESP32 no Wokwi |
-| vizi002 | `urn:ngsi-ld:SensorVizi:002` | Praça Central | simulador |
-| vizi003 | `urn:ngsi-ld:SensorVizi:003` | Córrego da Av. Brasil | simulador |
+| vizi002 | `urn:ngsi-ld:SensorVizi:002` | Praça do Campo Limpo | simulador |
+| vizi003 | `urn:ngsi-ld:SensorVizi:003` | Córrego Pirajuçara | simulador |
 
 Headers de todas as chamadas: `fiware-service: smart` e `fiware-servicepath: /`.
 

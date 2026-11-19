@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { ATUALIZAR_SENSORES_MS, BAIRRO } from '../config'
+import { ATUALIZAR_SENSORES_MS, SO_SENSORES, BAIRRO } from '../config'
 import { gerarCsv, montarTextoReclamacao, resumirBairro } from '../domain/bairro'
 import { listarAlertasSensor } from '../services/sensoresService'
 import { useCarregar } from './useCarregar'
@@ -8,7 +8,8 @@ import { useRelatos } from './useRelatos'
 // Resumo de horas sem serviço, texto de reclamação e CSV (telas Bairro e Relatório).
 export function useResumoBairro() {
   const sensores = useCarregar(listarAlertasSensor, '', { intervaloMs: ATUALIZAR_SENSORES_MS })
-  const { relatos, carregando: carregandoRelatos, erro: erroRelatos, recarregar: recarregarRelatos } = useRelatos()
+  const { relatos: todosRelatos, carregando: carregandoRelatos, erro: erroRelatos, recarregar: recarregarRelatos } = useRelatos()
+  const relatos = useMemo(() => (SO_SENSORES ? [] : todosRelatos), [todosRelatos])
 
   const resumo = useMemo(() => resumirBairro(sensores.dados ?? [], relatos), [sensores.dados, relatos])
   const textoReclamacao = useMemo(() => montarTextoReclamacao(resumo, BAIRRO.nome), [resumo])
